@@ -1,78 +1,67 @@
 #!/usr/bin/python3
-"""
-do_pack(): Generates a .tgz archive from the
-contents of the web_static folder
-do_deploy(): Distributes an archive to a web server
-deploy (): Creates and distributes an archive to a web server
-"""
-
-from fabric.operations import local, run, put
-from datetime import datetime
+"""Module to Compress files"""
 import os
-from fabric.api import env
-import re
+from datetime import datetime
+from fabric.api import *
 
-
-env.hosts = ['35.190.176.186', '35.196.156.157']
+env.hosts = ["54.160.120.200", "54.145.155.255"]
+env.user = "ubuntu"
 
 
 def do_pack():
-    """Function to compress files in an archive"""
-    local("mkdir -p versions")
-    filename = "versions/web_static_{}.tgz".format(datetime.strftime(
-                                                   datetime.now(),
-                                                   "%Y%m%d%H%M%S"))
-    result = local("tar -cvzf {} web_static"
-                   .format(filename))
-    if result.failed:
+    """Create a .tgz archive from the contents of the web_static folder."""
+    try:
+        if not os.path.isdir("versions"):
+            os.mkdir("versions")
+        now = datetime.now().strftime("%Y%m%d%H%M%S")
+        archive_name = "web_static_{}.tgz".format(now)
+        archive_path = "versions/{}".format(archive_name)
+        print("Packing web_static to {}".format(archive_path))
+        local("tar -cvzf {} web_static".format(archive_path))
+        size = os.stat(archive_path).st_size
+        print("web_static packed: {} -> {}Bytes".format(archive_path, size))
+        return archive_path
+    except Exception as e:
+        print("Archive creation failed:", str(e))
         return None
-    return filename
 
 
 def do_deploy(archive_path):
-    """Function to distribute an archive to a server"""
+    """Distributes an archive to your web servers."""
     if not os.path.exists(archive_path):
         return False
-    rex = r'^versions/(\S+).tgz'
-    match = re.search(rex, archive_path)
-    filename = match.group(1)
-    res = put(archive_path, "/tmp/{}.tgz".format(filename))
-    if res.failed:
+
+    try:
+        # Upload the archive to the /tmp/ directory of the web server
+        put(archive_path, "/tmp/")
+        filename = os.path.basename(archive_path)
+        folder_name = "/data/web_static/releases/{}".format(
+                                                      filename.split(".")[0]
+                                                    )
+
+        # Uncompress the archive to the folder
+        run("mkdir -p {}".format(folder_name))
+        run("tar -xzf /tmp/{} -C {}".format(filename, folder_name))
+        run("rm /tmp/{}".format(filename))
+        run("mv {}/web_static/* {}/".format(folder_name, folder_name))
+        run("rm -rf {}/web_static".format(folder_name))
+
+        # Delete the symbolic link /data/web_static/current from the web server
+        run("rm -rf /data/web_static/current")
+
+        # Create a new symbolic link linked to the new version of the code
+        run("ln -s {} /data/web_static/current".format(folder_name))
+        print("New version deployed!")
+
+        return True
+    except Exception as e:
+        print("Deployment failed:", str(e))
         return False
-    res = run("mkdir -p /data/web_static/releases/{}/".format(filename))
-    if res.failed:
-        return False
-    res = run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/"
-              .format(filename, filename))
-    if res.failed:
-        return False
-    res = run("rm /tmp/{}.tgz".format(filename))
-    if res.failed:
-        return False
-    res = run("mv /data/web_static/releases/{}"
-              "/web_static/* /data/web_static/releases/{}/"
-              .format(filename, filename))
-    if res.failed:
-        return False
-    res = run("rm -rf /data/web_static/releases/{}/web_static"
-              .format(filename))
-    if res.failed:
-        return False
-    res = run("rm -rf /data/web_static/current")
-    if res.failed:
-        return False
-    res = run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
-              .format(filename))
-    if res.failed:
-        return False
-    print('New version deployed!')
-    return True
 
 
 def deploy():
-    """Creates and distributes an archive to a web server"""
-    filepath = do_pack()
-    if filepath is None:
+    """Create and distribute an archive to web servers"""
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    d = do_deploy(filepath)
-    return d
+    return do_deploy(archive_path)

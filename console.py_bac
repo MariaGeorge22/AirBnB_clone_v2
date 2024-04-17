@@ -41,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Create and save a new class instance
 
-        Usage: create <class name> [`<attribute_key>`="<attribute_value>" ...]
+        Usage: create <class name>
 
         Ex:
         (hbnb) create BaseModel

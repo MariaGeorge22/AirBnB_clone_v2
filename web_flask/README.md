@@ -1,20 +1,21 @@
-# 0x04. AirBnB clone - Web framework
+# AirBnB_clone_v2
 
-## Description
-This project's goal is to learn what a web framework is, through the installation and configuration of Flask on the AirBnB clone.
+## web_flask
 
-## Table of contents
+                          +-+-+-+-+-+-+-+-+-+-+-+-+-+
+                          |F|o|u|r|t|y|T|h|r|e|e|4|3|
+                          +-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                                         
+                         _|            _|  _|  _|_|_|    
+                       _|_|  _|    _|  _|  _|        _|  
+                         _|    _|_|    _|_|_|_|  _|_|    
+                         _|  _|    _|      _|        _|  
+                         _|  _|    _|      _|  _|_|_|    
+                                                         
+                                                         
+## ❝ Quote ❞
 
-**1. Python scripts**
+: But for some things, Perl just isn't the optimal choice.
 
-All the .py files are Flask scripts that start a Flask app.
-Up until 6-number_odd_or_even.py, the scripts are just training.
-After this, the scripts each start a Flask app with a different routing, linked to the AirBnB clone storage.
-
-**2. Templates**
-
-All the files in the [templates](./templates) directory are HTML templates for the Flask scripts to render.
-
-## Author 
-
-Ndege Monda
+(yet)   :-)
+		-- Larry Wall in <199702221943.LAA20388@wall.org>
