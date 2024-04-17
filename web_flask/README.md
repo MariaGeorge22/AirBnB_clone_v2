@@ -1,31 +1,20 @@
 # 0x04. AirBnB clone - Web framework
-- [x] Python
-- [x] Back-end
-- [x] Webserver
-- [x] Flask
 
-## Resources Used
-* What is a Web Framework?
-* A Minimal Application
-* Routing (except “HTTP Methods”)
-* Rendering Templates
-* Synopsis
-* Variables
-* Comments
-* Whitespace Control
-* List of Control Structures (read up to “Call”)
-* Flask
-* Jinja
+## Description
+This project's goal is to learn what a web framework is, through the installation and configuration of Flask on the AirBnB clone.
 
-## Learning Objectives
-* What is a Web Framework
-* How to build a web framework with Flask
-* How to define routes in Flask
-* What is a route
-* How to handle variables in a route
-* What is a template
-* How to create a HTML response in Flask by using a template
-* How to create a dynamic template (loops, conditions…)
-* How to display in HTML data from a MySQL database
+## Table of contents
 
-Have fun looking around.
+**1. Python scripts**
+
+All the .py files are Flask scripts that start a Flask app.
+Up until 6-number_odd_or_even.py, the scripts are just training.
+After this, the scripts each start a Flask app with a different routing, linked to the AirBnB clone storage.
+
+**2. Templates**
+
+All the files in the [templates](./templates) directory are HTML templates for the Flask scripts to render.
+
+## Author 
+
+Ndege Monda

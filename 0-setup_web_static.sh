@@ -1,43 +1,20 @@
 #!/usr/bin/env bash
-# This program will install Nginx and Put a static file in it.
-# This bash script will automate the creation of files.
-
-sudo apt update
-sudo apt-get install nginx -y
-sudo ufw allow "Nginx HTTP"
-
-# Creating All Required Folders and File
-sudo mkdir -p /data/web_static/releases
-sudo mkdir -p /data/web_static/shared
-sudo mkdir -p /data/web_static/releases/test
-#sudo mkdir -p /data/web_static/current
-sudo touch /data/web_static/releases/test/index.html
-
-PATH_F=/data/web_static/releases/test/index.html
-
-# Adding a Test Content to index file
-CONTENT="<html>
-<head>
-</head>
-<body>
+# sets up your web servers for the deployment of web_static
+apt-get -y update
+apt-get -y install nginx
+ufw allow 'Nginx HTTP'
+mkdir -p /data/web_static/
+mkdir -p /data/web_static/releases/test/
+mkdir -p /data/web_static/shared/
+echo "<html>
+  <head>
+  </head>
+  <body>
     Holberton School
-</body>
-</html>"
-
-echo "$CONTENT" | sudo tee "$PATH_F"
-
-# Creating A Symbolic Linking
-sudo ln -sfn /data/web_static/releases/test/ /data/web_static/current
-
-# Granting Ownership
-sudo chown -R ubuntu:ubuntu /data/
-
-# Creating hbtn dir
-#mkdir hbtn_static
-
-# Here is the section that configures Nginx Config file
-CONF_PATH=/etc/nginx/sites-enabled/default
-
-sudo sed -i "/listen 80 default_server;/a\\\tlocation /hbnb_static/ {\n\talias /data/web_static/current/;\n\t}" "$CONF_PATH"
-
-sudo service nginx restart
+  </body>
+</html>" > /data/web_static/releases/test/index.html
+ln -sf /data/web_static/releases/test /data/web_static/current
+chown -R ubuntu:ubuntu /data
+sed -i '/listen 80 default_server/a location /hbnb_static/ { alias /data/web_static/current/;}' /etc/nginx/sites-available/default
+service nginx restart
+exit 0
