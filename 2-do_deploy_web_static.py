@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from fabric.api import *
 
-env.hosts = ["54.160.120.200", "54.145.155.255"]
+env.hosts = ["54.234.73.177","18.233.62.214"]
 env.user = "ubuntu"
 
 
@@ -40,17 +40,17 @@ def do_deploy(archive_path):
                                                     )
 
         # Uncompress the archive to the folder
-        run("mkdir -p {}".format(folder_name))
-        run("tar -xzf /tmp/{} -C {}".format(filename, folder_name))
-        run("rm /tmp/{}".format(filename))
-        run("mv {}/web_static/* {}/".format(folder_name, folder_name))
-        run("rm -rf {}/web_static".format(folder_name))
+        run("sudo mkdir -p {}".format(folder_name))
+        run("sudo tar -xzf /tmp/{} -C {}".format(filename, folder_name))
+        run("sudo rm /tmp/{}".format(filename))
+        run("sudo mv -f {}/web_static/* {}/".format(folder_name, folder_name))
+        run("sudo rm -rf {}/web_static".format(folder_name))
 
         # Delete the symbolic link /data/web_static/current from the web server
         run("rm -rf /data/web_static/current")
 
         # Create a new symbolic link linked to the new version of the code
-        run("ln -s {} /data/web_static/current".format(folder_name))
+        run("sudo ln -s {} /data/web_static/current".format(folder_name))
         print("New version deployed!")
 
         return True
