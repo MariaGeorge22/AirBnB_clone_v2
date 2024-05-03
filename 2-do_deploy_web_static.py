@@ -43,11 +43,11 @@ def do_deploy(archive_path):
         run("sudo mkdir -p {}".format(folder_name))
         run("sudo tar -xzf /tmp/{} -C {}".format(filename, folder_name))
         run("sudo rm /tmp/{}".format(filename))
-        run("sudo mv -f {}/web_static/* {}/".format(folder_name, folder_name))
+        run("sudo mv {}/web_static/* {}/".format(folder_name, folder_name))
         run("sudo rm -rf {}/web_static".format(folder_name))
 
         # Delete the symbolic link /data/web_static/current from the web server
-        run("rm -rf /data/web_static/current")
+        run("sudo rm -rf /data/web_static/current")
 
         # Create a new symbolic link linked to the new version of the code
         run("sudo ln -s {} /data/web_static/current".format(folder_name))
