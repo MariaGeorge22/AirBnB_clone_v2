@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""pack and deploy content to server
+"""pack and deploy content to servers
 """
 from fabric.api import local, env, run, put
 from datetime import datetime
