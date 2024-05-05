@@ -5,7 +5,7 @@ that distributes an archive to your web servers """
 import time
 from fabric.api import sudo, put, env, local
 from os.path import exists, isdir
-
+env.hosts = ["54.234.73.177", "18.233.62.214"]
 
 def do_pack():
     """ A function that generates a .tgz archive """
